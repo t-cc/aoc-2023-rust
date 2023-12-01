@@ -37,6 +37,7 @@ pub fn part_two(input: &str) -> Option<u32> {
                 for (name_index, name) in NUMBER_NAMES.iter().enumerate() {
                     if slice.starts_with(name) {
                         numbers.push(name_index as u32 + 1);
+                        index += name.len() - 2;
                         break
                     }
                 }
