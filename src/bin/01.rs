@@ -45,8 +45,6 @@ pub fn part_two(input: &str) -> Option<u32> {
         }
         let first = numbers.first().copied().unwrap();
         let last = numbers.last().copied().unwrap();
-        println!("{}", line);
-        println!("{}", (first * 10 + last));
         sum += first * 10 + last;
     }
     return sum.into()
