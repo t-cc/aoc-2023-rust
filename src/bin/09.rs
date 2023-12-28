@@ -34,7 +34,38 @@ pub fn part_one(input: &str) -> Option<u32> {
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
-    None
+    let mut sum = 0i32;
+    for line in input.lines() {
+        let numbers: Vec<i32> = line
+            .split_whitespace()
+            .map(|c| c.trim())
+            .filter(|&c| c.len() != 0)
+            .map(|c| c.parse::<i32>().unwrap())
+            .collect();
+        let mut diferences: Vec<i32> = numbers.clone();
+        let mut first_numbers: Vec<i32> = Vec::new();
+        first_numbers.push(numbers.first().unwrap().clone());
+        // sum += numbers.last().unwrap().clone();
+        while !diferences
+            .iter()
+            .map(|&a| a == 0i32)
+            .reduce(|a, b| a && b)
+            .unwrap()
+        {
+            let mut tmp: Vec<i32> = Vec::new();
+            for i in 0..diferences.len() - 1 {
+                tmp.push(diferences[i] - diferences[i + 1])
+            }
+            first_numbers.push(tmp.first().unwrap().clone());
+            diferences = tmp.clone();
+            println!("DIFF {:?}", diferences);
+            // sum += diferences.last().unwrap().clone();
+        }
+        println!("{:?}", first_numbers);
+        sum += first_numbers.iter().cloned().reduce(|a, b| a + b).unwrap()
+    }
+
+    return (sum as u32).into();
 }
 
 #[cfg(test)]
@@ -50,6 +81,6 @@ mod tests {
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, None);
+        assert_eq!(result, Some(2u32));
     }
 }
