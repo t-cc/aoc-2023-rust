@@ -58,10 +58,10 @@ pub fn part_two(input: &str) -> Option<u32> {
             }
             first_numbers.push(tmp.first().unwrap().clone());
             diferences = tmp.clone();
-            println!("DIFF {:?}", diferences);
+            // println!("DIFF {:?}", diferences);
             // sum += diferences.last().unwrap().clone();
         }
-        println!("{:?}", first_numbers);
+        // println!("{:?}", first_numbers);
         sum += first_numbers.iter().cloned().reduce(|a, b| a + b).unwrap()
     }
 
