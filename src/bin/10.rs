@@ -70,14 +70,14 @@ pub fn part_one(input: &str) -> Option<u32> {
         let mut current_point = start_movement;
         let mut has_movements = true;
         while has_movements {
-            println!("C POINT {:?}", current_point);
+            // println!("C POINT {:?}", current_point);
             if current_point.y < map.len() as i32 && current_point.y >= 0i32 {
                 let row = map.iter().nth(current_point.y as usize).unwrap();
                 // println!("row: {:?}", row);
                 if current_point.x < row.len() as i32 && current_point.x >= 0i32 {
                     let possible_movements: Vec<Point> =
                         row.iter().nth(current_point.x as usize).unwrap().clone();
-                    println!("movements: {:?}", possible_movements);
+                    // println!("movements: {:?}", possible_movements);
                     // println!("POINT: {:?}", previous_point);
                     if possible_movements.len() > 0 {
                         for movement in possible_movements {
@@ -108,11 +108,11 @@ pub fn part_one(input: &str) -> Option<u32> {
         }
     }
 
-    println!(
-        "DISTANCES {:?}",
-        (distances.iter().flatten().filter(|&x| x > &0).count() + 1) / 2
-    );
-    println!("------");
+    // println!(
+    //     "DISTANCES {:?}",
+    //     (distances.iter().flatten().filter(|&x| x > &0).count() + 1) / 2
+    // );
+    // println!("------");
     // return distances.iter().flatten().max().copied();
     return Some(((distances.iter().flatten().filter(|&x| x > &0).count() + 1) / 2) as u32);
 }
