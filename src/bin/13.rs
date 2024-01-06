@@ -1,6 +1,6 @@
 advent_of_code::solution!(13);
 
-fn find_first_vertical_reflection(pattern: Vec<String>) -> u32 {
+fn find_first_vertical_reflection(pattern: Vec<String>, ignore: u32) -> u32 {
     let max_y = pattern.len() - 1;
     for i in 0..max_y {
         // println!("INDEX {:?}", i);
@@ -12,7 +12,7 @@ fn find_first_vertical_reflection(pattern: Vec<String>) -> u32 {
                 all_equal = false;
             }
         }
-        if all_equal {
+        if all_equal && (i + 1) as u32 != ignore {
             return (i + 1) as u32;
         }
     }
@@ -61,13 +61,13 @@ pub fn part_one(input: &str) -> Option<u32> {
     // println!("patterns: {:?}", pattern_list);
 
     for pattern in pattern_list {
-        let vertical = find_first_vertical_reflection(pattern.clone());
+        let vertical = find_first_vertical_reflection(pattern.clone(), 0);
         // println!("{:?} -> vertical {:?}", pattern, vertical);
 
         sum += 100 * vertical;
 
         let transposed = transpose_patter(pattern.clone());
-        let horizontal = find_first_vertical_reflection(transposed.clone());
+        let horizontal = find_first_vertical_reflection(transposed.clone(), 0);
         // println!("{:?} -> horizontal {:?}", transposed, horizontal);
         sum += horizontal;
     }
@@ -75,7 +75,9 @@ pub fn part_one(input: &str) -> Option<u32> {
     return Some(sum);
 }
 
-fn find_different_reflection(pattern: Vec<String>, original: u32) -> u32 {
+fn find_different_reflection(pattern: Vec<String>) -> u32 {
+    let original = find_first_vertical_reflection(pattern.clone(), 0);
+
     let first: String = pattern.first().unwrap().clone();
 
     let y_max = pattern.len();
@@ -88,9 +90,8 @@ fn find_different_reflection(pattern: Vec<String>, original: u32) -> u32 {
             // if y == 0 {
             //     println!("ORIGNAL ROW {:?}", row);
             // }
-            let char = row.chars().nth(x).unwrap();
             let mut next_chart = ".";
-            if char == '.' {
+            if row.chars().nth(x).unwrap() == '.' {
                 next_chart = "#";
             }
             row.replace_range(x..x + 1, next_chart);
@@ -98,12 +99,12 @@ fn find_different_reflection(pattern: Vec<String>, original: u32) -> u32 {
             //    println!("NEW ROW     {:?}", row);
             // }
             new_pattern[y] = row;
-            let new_reflection = find_first_vertical_reflection(new_pattern.clone());
+            let new_reflection = find_first_vertical_reflection(new_pattern.clone(), original);
             // println!(
             //    "CLEANED: {:?} -> {:?} ?= {:?}",
             //    new_pattern, new_reflection, original
             // );
-            if new_reflection > 0 && new_reflection != original {
+            if new_reflection > 0 {
                 return new_reflection;
             }
         }
@@ -118,15 +119,13 @@ pub fn part_two(input: &str) -> Option<u32> {
     // println!("patterns: {:?}", pattern_list);
 
     for pattern in pattern_list {
-        let vertical = find_first_vertical_reflection(pattern.clone());
         // println!("{:?} -> vertical {:?}", pattern, vertical);
-        let new_vertical = find_different_reflection(pattern.clone(), vertical);
+        let new_vertical = find_different_reflection(pattern.clone());
         sum += 100 * new_vertical;
 
         let transposed = transpose_patter(pattern.clone());
-        let horizontal = find_first_vertical_reflection(transposed.clone());
         // println!("{:?} -> horizontal {:?}", transposed, horizontal);
-        let new_horizontal = find_different_reflection(transposed.clone(), horizontal);
+        let new_horizontal = find_different_reflection(transposed.clone());
         sum += new_horizontal;
     }
 
